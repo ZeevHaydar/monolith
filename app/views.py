@@ -27,7 +27,7 @@ def say_hello(request):
 @api_view(['GET'])
 def barang(request):
     if request.method == 'GET':
-        response = requests.get(BASE_URL + '/barang')
+        response = requests.get(BASE_URL + '/barang')  # BASE_URL bisa diganti dengan URL yang dipakai sebagai API single service
         data = response.json()
         print(data)
         return Response(data)
@@ -35,7 +35,23 @@ def barang(request):
 @api_view(['GET'])
 def perusahaan(request):
     if request.method == 'GET':
-        response = requests.get(BASE_URL + '/perusahaan')
+        response = requests.get(BASE_URL + '/perusahaan')  # BASE_URL bisa diganti dengan URL yang dipakai sebagai API single service
+        data = response.json()
+        print(data)
+        return Response(data)
+
+@api_view(['GET'])
+def barang_by_id(request, id):
+    if request.method == 'GET':
+        response = requests.get(BASE_URL + f'/barang/{id}')
+        data = response.json()
+        print(data)
+        return Response(data)
+
+@api_view(['GET'])
+def perusahaan_by_id(request, id):
+    if request.method == 'GET':
+        response = requests.get(BASE_URL + f'/perusahaan/{id}')
         data = response.json()
         print(data)
         return Response(data)
@@ -109,7 +125,7 @@ def register(request):
 @api_view(['GET'])
 def history(request):
     username = request.data.get('username')
-    history = RiwayatPembelian.objects.filter(user=username).get()
+    history = RiwayatPembelian.objects.get(user=username)
     serializer = RiwayatPembelianSerializer(data=history)
     response_data = {
         "status": "success",
@@ -130,6 +146,27 @@ def buy(request):
         "tanggal_pembelian": datetime.now(),
         "jumlah": request.data.get("jumlah")
     }
+
+    barang_response = requests.get(BASE_URL + f"barang/{dataBarang['barang']}")
+    barang = barang_response.json()
+    stok_barang = barang['stok']
+    stok_barang_updated = stok_barang - dataBarang['jumlah']
+    if stok_barang_updated < 0:
+        return Response(data={
+            "status": "error",
+            "message": "stok habis",
+            "data": {}
+        },status=status.HTTP_406_NOT_ACCEPTABLE)
+    updateBody ={
+        "nama":barang['nama'],
+        "harga":barang['harga'], 
+        "stok":stok_barang_updated, 
+        "perusahaan_id":barang['perusahaan_id'], 
+        "kode":barang['kode']
+    }
+    update_response = requests.put(BASE_URL + f"barang/{dataBarang['barang']}", json=updateBody)
+    if update_response.status == "error":
+        return Response(data={}, status=status.HTTP_400_BAD_REQUEST)
     history = RiwayatPembelian.objects.create(**dataBarang)
     history.save()
     historySerializers = RiwayatPembelianSerializer(data=history)

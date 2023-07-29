@@ -60,6 +60,6 @@ class Perusahaan(models.Model):
 
 class RiwayatPembelian(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    barang = models.ForeignKey(Barang, on_delete=models.CASCADE)
+    barang = models.CharField(max_length=100)
     tanggal_pembelian = models.DateTimeField(auto_now_add=True)
     jumlah = models.PositiveIntegerField()

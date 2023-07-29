@@ -60,7 +60,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('tanggal_pembelian', models.DateTimeField(auto_now_add=True)),
                 ('jumlah', models.PositiveIntegerField()),
-                ('barang', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='app.barang')),
+                ('barang', models.CharField(max_length=100)),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
