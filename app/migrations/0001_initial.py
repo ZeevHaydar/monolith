@@ -34,27 +34,6 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='Barang',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('nama', models.CharField(max_length=100)),
-                ('harga', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('stok', models.PositiveIntegerField()),
-                ('kode', models.CharField(max_length=50, unique=True)),
-                ('perusahaan_id', models.CharField(max_length=50)),
-            ],
-        ),
-        migrations.CreateModel(
-            name='Perusahaan',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('nama', models.CharField(max_length=100)),
-                ('alamat', models.TextField()),
-                ('no_telp', models.CharField(max_length=20)),
-                ('kode', models.CharField(max_length=10, unique=True)),
-            ],
-        ),
-        migrations.CreateModel(
             name='RiwayatPembelian',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),

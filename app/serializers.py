@@ -11,15 +11,6 @@ class UserSerializer(serializers.ModelSerializer):
         validated_data['password'] = make_password(validated_data['password'])
         return super().create(validated_data)
 
-class PerusahaanSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Perusahaan
-        fields = ('nama', 'alamat', 'no_telp', 'kode')
-
-class BarangSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Barang
-        fields = ('nama', 'harga', 'stok', 'kode', 'perusahaan_id')
 
 class RiwayatPembelianSerializer(serializers.ModelSerializer):
     class Meta:
