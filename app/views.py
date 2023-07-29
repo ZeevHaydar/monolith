@@ -12,6 +12,7 @@ from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 import json
 import requests
+import datetime
 
 BASE_URL = 'http://127.0.0.1:5173'
 # Create your views here.
@@ -115,6 +116,21 @@ def history(request):
         "data": serializer.data
     }
     return Response(data=response_data, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+def buy(request):
+    # get the current username that buy the items
+    # assumption that only one type of item can be bought at one time
+    dataBarang = {
+        "username": request.user.username,
+        "barang": request.data.get("barang"),
+        "tanggal_pembelian": datetime.now(),
+        "jumlah": request.data.get("jumlah")
+    }
+    history = RiwayatPembelian.objects.create(**dataBarang)
+    history.save()
+    historySerializers = RiwayatPembelianSerializer(data=history)
+    return Response(data=historySerializers.data, status=status.HTTP_201_CREATED)
 
 
 def login_page(request):
