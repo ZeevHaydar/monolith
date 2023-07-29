@@ -71,8 +71,7 @@ def login(request):
         return Response(data=response_data, status=status.HTTP_401_UNAUTHORIZED)
 
 
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
+
 @api_view(['POST'])
 def register(request):
     username = request.data.get('username')
@@ -104,7 +103,9 @@ def register(request):
     else:
         print(serializer.errors)
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+    
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 @api_view(['GET'])
 def history(request):
     username = request.data.get('username')
@@ -117,6 +118,8 @@ def history(request):
     }
     return Response(data=response_data, status=status.HTTP_200_OK)
 
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 @api_view(['POST'])
 def buy(request):
     # get the current username that buy the items
